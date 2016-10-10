@@ -18,16 +18,22 @@ import com.raq.spring4.employee.vo.EmployeeVO;
 @RequestMapping("/employee")
 public class EmployeeJDBCController {
 
-	private static final String VIEW_EMPLOYEE = "viewEmployee";
-	private static final String ADD_EMPLOYEE = "addEmployee";
-	private static final String RETRIEVE_EMPLOYEE = "retrieveEmployee";
-	private static final String UDPATE_EMPLOYEE = "updateEmployee";
-
-
-
-	 
+		private static final String VIEW_EMPLOYEE = "viewEmployee";
+		private static final String ADD_EMPLOYEE = "addEmployee";
+		private static final String RETRIEVE_EMPLOYEE = "retrieveEmployee";
+		private static final String UDPATE_EMPLOYEE = "updateEmployee";
+	
 		@Autowired
 		private EmployeeDAO employeeDAO;
+
+	 
+		public void setEmployeeDAO(EmployeeDAO employeeDAO) {
+			this.employeeDAO = employeeDAO;
+		}
+
+
+
+
 	
 		//http://localhost:1975/spring-crud-jdbc/employee
 		@RequestMapping()
@@ -101,7 +107,7 @@ public class EmployeeJDBCController {
 			model.addAttribute("action", "updateEmployee");
 			System.out.println("model.getAttribute(addEmployee) " 	+ model.get("addEmployee"));
 			//EmployeeVO existingEmployee = getEmployeeById(empId,session);
-			EmployeeVO existingEmployee = employeeDAO.get(Integer.getInteger(empId));
+			EmployeeVO existingEmployee = employeeDAO.get(Integer.parseInt(empId));
 			System.out.println("-- update employee invoked" 		+ existingEmployee);
 			if(existingEmployee != null){
 				model.addAttribute("employeevo", existingEmployee);
@@ -117,11 +123,11 @@ public class EmployeeJDBCController {
 		//http://localhost:1975/spring-crud-jdbc/employee/deleteEmployee?empId=11
 		@RequestMapping(value = "/deleteEmployee", method = RequestMethod.GET)
 		public String deleteEmployee(@ModelAttribute("employeevo")EmployeeVO employee,@RequestParam("empId") String empId,ModelMap model,HttpSession session) {
-			model.addAttribute("action", "updateEmployee");
+			model.addAttribute("action", "deleteEmployee");
 			System.out.println("model.getAttribute(addEmployee) " 	+ model.get("addEmployee"));
 			//delete employee from DB
 			//removeEmployeeById(empId,session);
-			employeeDAO.delete(Integer.getInteger(empId));
+			employeeDAO.delete(Integer.parseInt(empId));
 			
 			model.addAttribute("employeevo", new EmployeeVO());
 			
@@ -151,7 +157,8 @@ public class EmployeeJDBCController {
 			
 			//get Employee from DB
 			//EmployeeVO employee = getEmployeeById(empId,session);
-			EmployeeVO employee = employeeDAO.get(Integer.getInteger(empId));
+			System.out.println("Integer.parseInt(empId)" + Integer.parseInt(empId));
+			EmployeeVO employee = employeeDAO.get(Integer.parseInt(empId));
 			model.addAttribute("employeevo", employee);
 			System.out.println("model.getAttribute(action) "
 					+ model.get("action"));
@@ -179,6 +186,7 @@ public class EmployeeJDBCController {
 			
 			//save employee in DB
 			//saveOrUpdateEmployee(employee, session);
+			System.out.println("createEmployee employeeDAO " + employeeDAO);
 			employeeDAO.create(employee);
 			
 			model.addAttribute("employeevo", employee);
@@ -199,6 +207,7 @@ public class EmployeeJDBCController {
 			if(employee != null){
 				//save employee in DB
 				//saveOrUpdateEmployee(employee, session);
+				System.out.println("updateEmployee employeeDAO " + employeeDAO);
 				employeeDAO.update(employee);
 				model.addAttribute("employeevo", employee);
 				statusMessage = "Employee updated Success with Id " + employee.getId();

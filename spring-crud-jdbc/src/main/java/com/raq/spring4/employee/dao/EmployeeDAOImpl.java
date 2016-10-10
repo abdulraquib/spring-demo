@@ -13,10 +13,15 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.raq.spring4.employee.vo.EmployeeVO;
 
+
 public class EmployeeDAOImpl implements EmployeeDAO {
 	
 	private JdbcTemplate jdbcTemplate;
 	 
+	public EmployeeDAOImpl(){
+		
+	}
+	
     public EmployeeDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
