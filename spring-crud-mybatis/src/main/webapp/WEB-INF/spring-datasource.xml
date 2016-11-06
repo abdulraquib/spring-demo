@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+		<bean id="dataSource"
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	
+			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<property name="url" value="jdbc:mysql://127.0.0.1:3306" />
+			<property name="username" value="workshopuser" />
+			<property name="password" value="workshopuser" />
+		</bean>
+
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		  <property name="dataSource" ref="dataSource" />
+		</bean>
+
+		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		  <property name="dataSource" ref="dataSource" />
+		</bean>
+
+		<bean id="employeeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		  <property name="mapperInterface" value="com.raq.spring4.employee.dao.mybatis.EmployeeMapper" />
+		  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		</bean>
+
+		<bean id="employeeDAO" class="com.raq.spring4.employee.dao.EmployeeMybatisDAOImpl">
+			<property name="employeeMapper" ref="employeeMapper" />
+		</bean>
+
+</beans>
